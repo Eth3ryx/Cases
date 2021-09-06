@@ -37,11 +37,11 @@ public class EventListener implements Listener {
     @EventHandler
     public void onJoin (PlayerJoinEvent e) {
         Player player = e.getPlayer();
-
         if (!player.hasPlayedBefore()) {
             Cases.getInstance().keys.set(player.getName(), 0);
             Cases.getInstance().keys.save();
         }
+        Cases.getInstance().loadCase(player);
     }
 
     @EventHandler
@@ -50,18 +50,6 @@ public class EventListener implements Listener {
         Block block = e.getBlock();
         Player player = e.getPlayer();
         Location loc = new Location(block.x, block.y+1, block.z);
-        if (Cases.getInstance().command) {
-            int[] faces = new int[]{2, 5, 3, 4};
-            chestCase.setDamage(faces[player != null ? player.getDirection().getHorizontalIndex() : 0]);
-            assert player != null;
-            player.sendMessage(TextFormat.GREEN + "Кейс успешно установлен");
-            block.getLevel().setBlock(loc, chestCase);
-            Cases.getInstance().floatingTextParticle = new FloatingTextParticle(loc.add(0.5, 2, 0.5), "§eКейс с ресурсами");
-            Cases.getInstance().floatingTextParticle.setText("§aУ вас §b" + Cases.getInstance().keys.get(player.getName()) + "§a ключей");
-            block.getLevel().addParticle(Cases.getInstance().floatingTextParticle, Server.getInstance().getOnlinePlayers().values());
-            Cases.getInstance().command = false;
-        }
-
 
         if (block.getId() == Block.ENDER_CHEST) {
             e.setCancelled();
@@ -172,57 +160,39 @@ public class EventListener implements Listener {
         Item item4 = new Item(Item.CARROT);
         item4.setCount(16);
 
+        AddItemEntityPacket pk = new AddItemEntityPacket();
+        int x = (int) Cases.getInstance().caseloc.get("x");
+        int y = (int) Cases.getInstance().caseloc.get("y");
+        int z = (int) Cases.getInstance().caseloc.get("z");
+        pk.x = (float) (x+0.5);
+        pk.y = (float) (y+0.5);
+        pk.z = (float) (z+0.5);
+        Location location = new Location(pk.x, pk.y+1, pk.z);
+
         if (chance < 10) {
             player.getInventory().addItem(item1);
-            AddItemEntityPacket pk = new AddItemEntityPacket();
-            pk.x = (float) (this.chestCase.getFloorX()+0.5);
-            pk.y = (float) (this.chestCase.getFloorY()+0.5);
-            pk.z = (float) (this.chestCase.getFloorZ()+0.5);
             pk.item = Item.get(Item.DIAMOND);
-            Location location = new Location(pk.x, pk.y+1, pk.z);
-            ftpItem = new FloatingTextParticle(location, "§7Diamond (16)");
-            for (Player p : Server.getInstance().getOnlinePlayers().values()) {
-                p.dataPacket(pk);
-            }
+            ftpItem = new FloatingTextParticle(location, "§7Алмаз (16)");
+
         }
         else if (chance < 30) {
             player.getInventory().addItem(item2);
-            AddItemEntityPacket pk = new AddItemEntityPacket();
-            pk.x = (float) (this.chestCase.getFloorX()+0.5);
-            pk.y = (float) (this.chestCase.getFloorY()+0.5);
-            pk.z = (float) (this.chestCase.getFloorZ()+0.5);
             pk.item = Item.get(Item.GOLD_INGOT);
-            Location location = new Location(pk.x, pk.y+1, pk.z);
-            ftpItem = new FloatingTextParticle(location, "§7Gold ingot (32)");
-            for (Player p : Server.getInstance().getOnlinePlayers().values()) {
-                p.dataPacket(pk);
-            }
+            ftpItem = new FloatingTextParticle(location, "§7Золотой (32)");
         }
         else if (chance < 60) {
             player.getInventory().addItem(item3);
-            AddItemEntityPacket pk = new AddItemEntityPacket();
-            pk.x = (float) (this.chestCase.getFloorX()+0.5);
-            pk.y = (float) (this.chestCase.getFloorY()+0.5);
-            pk.z = (float) (this.chestCase.getFloorZ()+0.5);
             pk.item = Item.get(Item.IRON_INGOT);
-            Location location = new Location(pk.x, pk.y+1, pk.z);
-            ftpItem = new FloatingTextParticle(location, "§7Iron ingot (32)");
-            for (Player p : Server.getInstance().getOnlinePlayers().values()) {
-                p.dataPacket(pk);
-            }
+            ftpItem = new FloatingTextParticle(location, "§7Железный слиток (32)");
         }
         else {
             player.getInventory().addItem(item4);
-            AddItemEntityPacket pk = new AddItemEntityPacket();
-            pk.x = (float) (this.chestCase.getFloorX()+0.5);
-            pk.y = (float) (this.chestCase.getFloorY()+0.5);
-            pk.z = (float) (this.chestCase.getFloorZ()+0.5);
             pk.item = Item.get(Item.CARROT);
-            Location location = new Location(pk.x, pk.y+1, pk.z);
-            ftpItem = new FloatingTextParticle(location, "§7Carrot (16)");
-            for (Player p : Server.getInstance().getOnlinePlayers().values()) {
-                p.dataPacket(pk);
-            }
+            ftpItem = new FloatingTextParticle(location, "§7Морковь (16)");
+        }
+
+        for (Player p : Server.getInstance().getOnlinePlayers().values()) {
+            p.dataPacket(pk);
         }
 
     }

@@ -1,0 +1,5 @@
+name: Cases
+main: ru.etheryx.Cases
+version: "1.0-SNAPSHOT"
+api: ["1.0.13"]
+author: Etheryx

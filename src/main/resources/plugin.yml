@@ -1,5 +1,5 @@
 name: Cases
 main: ru.etheryx.Cases
 version: "${project.version}"
-api: ["1.0.13"]
+api: ["1.0.12"]
 author: Etheryx

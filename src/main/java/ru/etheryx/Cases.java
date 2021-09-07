@@ -37,9 +37,9 @@ public class Cases extends PluginBase {
         this.keys = new Config("plugins/Cases/keys.yml", Config.YAML);
         this.caseloc = new Config("plugins/Cases/Case.yml", Config.YAML);
         if (!this.caseloc.exists("x") || !this.caseloc.exists("y") || !this.caseloc.exists("z")) {
-            this.caseloc.set("x", "2");
-            this.caseloc.set("y", "2");
-            this.caseloc.set("z", "2");
+            this.caseloc.set("x", 2);
+            this.caseloc.set("y", 2);
+            this.caseloc.set("z", 2);
             this.caseloc.save();
         }
 

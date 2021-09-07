@@ -46,10 +46,8 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onInteract (PlayerInteractEvent e) {
-        e.setCancelled();
         Block block = e.getBlock();
         Player player = e.getPlayer();
-        Location loc = new Location(block.x, block.y+1, block.z);
 
         if (block.getId() == Block.ENDER_CHEST) {
             e.setCancelled();

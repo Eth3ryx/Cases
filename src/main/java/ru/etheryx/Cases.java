@@ -62,6 +62,6 @@ public class Cases extends PluginBase {
         player.getLevel().setBlock(location, Block.get(Block.ENDER_CHEST));
         floatingTextParticle = new FloatingTextParticle(location.add(0.5, 2, 0.5), "§eКейс с ресурсами");
         floatingTextParticle.setText("§aУ вас §b" + Cases.getInstance().keys.get(player.getName()) + "§a ключей");
-        player.getLevel().addParticle(Cases.getInstance().floatingTextParticle, Server.getInstance().getOnlinePlayers().values());
+        player.getLevel().addParticle(Cases.getInstance().floatingTextParticle, player);
     }
 }
